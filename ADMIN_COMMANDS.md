@@ -20,6 +20,15 @@ MineClone2 implements a robust gamemode system similar to Minecraft. You need th
 
 *(Shortcuts: You can also just type `/survival`, `/creative`, or `/spectator`)*
 
+### Changing Game Modes Permanently
+
+*   **For a Single Player:** Using the command `/gamemode <mode> <player>` is **permanent**. It saves directly to their player profile. They will remain in that mode every time they log in, even after server restarts.
+*   **For All Players (Global Default):** To change the game mode for the *entire server* (so every new player joins in Creative instead of Survival), you must edit your `conf/minetest.conf` file and add this line:
+    ```ini
+    creative_mode = true
+    ```
+    *(Set it to `false` to default everyone back to Survival).* You must restart the server (`docker compose restart`) for this global setting to take effect.
+
 ## 🌍 World & Environment Commands
 
 *   `/time <0-24000>` - Set the time of day using raw Minetest ticks (e.g., `/time 6000` for midday, `/time 18000` for midnight).
