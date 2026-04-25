@@ -20,8 +20,8 @@ Adding mods to a Luanti (Minetest) server is straightforward, but since you are 
 Here is the step-by-step guide to installing mods for your server to add new objects and materials:
 
 ### 1. Find a Compatible Mod
-Browse the official Luanti content repository at **[ContentDB](https://content.minetest.net/packages/?type=mod)**. 
-Use the filter options on the left to filter for `MineClone2` compatibility.
+Browse the official Luanti content repository for VoxeLibre-compatible mods using this direct link:
+**[VoxeLibre/MineClone2 Compatible Mods on ContentDB](https://content.luanti.org/packages/?q=&type=mod&lang=&engine_version=&game=Wuzzy%2Fmineclone2&sort=&order=desc)**.
 
 *(Example: Let's say you found a furniture mod called `mcl_furniture`)*
 
