@@ -23,6 +23,10 @@ fi
 
 echo "Installing mod: $MOD_NAME"
 
+# Temporarily grant host write access to necessary directories using Docker
+echo "-> Granting write permissions to host..."
+docker run --rm -v $(pwd)/data:/var/lib/minetest alpine sh -c "mkdir -p /var/lib/minetest/.minetest/mods && chmod 777 /var/lib/minetest/.minetest/mods && if [ -f /var/lib/minetest/.minetest/worlds/world/world.mt ]; then chmod 666 /var/lib/minetest/.minetest/worlds/world/world.mt; fi"
+
 # Ensure mods directory exists
 mkdir -p "$MODS_DIR"
 
