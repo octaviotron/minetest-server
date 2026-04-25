@@ -16,7 +16,7 @@ echo "Disabling mod: $MOD_NAME"
 
 # Temporarily grant host write access to necessary directories using Docker
 echo "-> Granting write permissions to host..."
-docker run --rm -v $(pwd)/data:/var/lib/minetest alpine sh -c "if [ -f /var/lib/minetest/.minetest/worlds/world/world.mt ]; then chmod 666 /var/lib/minetest/.minetest/worlds/world/world.mt; fi"
+docker run --rm -v $(pwd)/data:/var/lib/minetest alpine sh -c "if [ -d /var/lib/minetest/.minetest/worlds/world ]; then chmod 777 /var/lib/minetest/.minetest/worlds/world; fi && if [ -f /var/lib/minetest/.minetest/worlds/world/world.mt ]; then chmod 666 /var/lib/minetest/.minetest/worlds/world/world.mt; fi"
 
 if [ -f "$WORLD_MT" ]; then
     if grep -q "^load_mod_${MOD_NAME} = " "$WORLD_MT"; then
