@@ -25,34 +25,23 @@ Use the filter options on the left to filter for `MineClone2` compatibility.
 
 *(Example: Let's say you found a furniture mod called `mcl_furniture`)*
 
-### 2. Download and Extract to the `mods` folder
-You need to create a `mods` folder in your server's data directory and extract the downloaded zip file there.
+### 2. Install using the automation script
+Download the `.zip` file for the mod to your machine. Instead of extracting it manually and editing the world configuration files, you can use the provided `install_mod.sh` script.
 
-You can do this directly from your terminal. Make sure you are in your project's root folder, then run:
+Run the script from the project root, providing the path to the downloaded zip file and the exact technical name of the mod:
 
 ```bash
-# Create the mods directory
-mkdir -p data/.minetest/mods
-
-# Navigate into it, download the mod, and extract it
-cd data/.minetest/mods
-wget <mod_zip_url_here>
-unzip <mod_zip_file.zip>
-```
-*Note: Make sure the extracted folder is named exactly after the mod's technical name (e.g., `mcl_furniture`). If it extracts as `mcl_furniture-master`, rename it.*
-
-### 3. Enable the Mod in your World
-Even if a mod is in the `mods` folder, it won't load until you explicitly enable it for your specific world. 
-
-Open your world configuration file located at `data/.minetest/worlds/world/world.mt`. 
-
-To enable the mod, add a new line at the bottom in this format: `load_mod_<modname> = true`.
-For example:
-```ini
-load_mod_mcl_furniture = true
+./install_mod.sh /path/to/mod.zip <mod_name>
 ```
 
-### 4. Restart the Server
+*Example for `mcl_furniture`:*
+```bash
+./install_mod.sh ~/Downloads/mcl_furniture-1.2.zip mcl_furniture
+```
+
+The script will automatically unzip the file, place it in the correct directory, rename it, enable it in your `world.mt` file, and fix Docker folder permissions for you.
+
+### 3. Restart the Server
 Apply the changes by restarting your Docker container:
 ```bash
 docker compose restart
