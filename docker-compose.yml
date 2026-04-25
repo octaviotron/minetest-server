@@ -1,0 +1,9 @@
+services:
+  minetest_server:
+    image: ghcr.io/minetest/minetest:master
+    restart: always
+    ports:
+      - "30000:30000/udp"
+    volumes:
+      - ./data:/var/lib/minetest
+      - ./conf:/etc/minetest
