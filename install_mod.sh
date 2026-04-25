@@ -107,14 +107,47 @@ echo "-> Successfully moved mod to $TARGET_DIR"
 
 # Enable the mod in world.mt
 if [ -f "$WORLD_MT" ]; then
-    if grep -q "^load_mod_${MOD_NAME} = " "$WORLD_MT"; then
-        # Replace existing line (in case it was set to false)
-        sed -i "s/^load_mod_${MOD_NAME} = .*/load_mod_${MOD_NAME} = true/" "$WORLD_MT"
-        echo "-> Updated existing entry in world.mt to 'true'"
+    # Detect if it's a modpack
+    IS_MODPACK=false
+    if [ -f "$TARGET_DIR/modpack.txt" ] || [ -f "$TARGET_DIR/modpack.conf" ]; then
+        IS_MODPACK=true
+    fi
+
+    if [ "$IS_MODPACK" = true ]; then
+        echo "-> Modpack detected! Enabling all contained mods individually..."
+        for submod in "$TARGET_DIR"/*/; do
+            if [ -d "$submod" ]; then
+                SUBMOD_NAME=$(basename "$submod")
+                # Try to parse exact name from submod
+                if [ -f "$submod/mod.conf" ]; then
+                    PARSED_NAME=$(awk -F'=' '/^name/ {gsub(/[ \t\r\n]/, "", $2); print $2}' "$submod/mod.conf")
+                    if [ -n "$PARSED_NAME" ]; then
+                        SUBMOD_NAME="$PARSED_NAME"
+                    fi
+                fi
+                
+                # Enable submod
+                if grep -q "^load_mod_${SUBMOD_NAME} = " "$WORLD_MT"; then
+                    sed -i "s/^load_mod_${SUBMOD_NAME} = .*/load_mod_${SUBMOD_NAME} = true/" "$WORLD_MT"
+                else
+                    echo "load_mod_${SUBMOD_NAME} = true" >> "$WORLD_MT"
+                fi
+                echo "   -> Enabled sub-mod: $SUBMOD_NAME"
+            fi
+        done
+        # Clean up any bad modpack entry if it was accidentally created before
+        sed -i "/^load_mod_${MOD_NAME} =/d" "$WORLD_MT"
     else
-        # Append new line
-        echo "load_mod_${MOD_NAME} = true" >> "$WORLD_MT"
-        echo "-> Added new entry to world.mt"
+        # Single mod enablement
+        if grep -q "^load_mod_${MOD_NAME} = " "$WORLD_MT"; then
+            # Replace existing line (in case it was set to false)
+            sed -i "s/^load_mod_${MOD_NAME} = .*/load_mod_${MOD_NAME} = true/" "$WORLD_MT"
+            echo "-> Updated existing entry in world.mt to 'true'"
+        else
+            # Append new line
+            echo "load_mod_${MOD_NAME} = true" >> "$WORLD_MT"
+            echo "-> Added new entry to world.mt"
+        fi
     fi
 else
     echo "-> Warning: $WORLD_MT not found. The mod was installed, but you must enable it manually."
