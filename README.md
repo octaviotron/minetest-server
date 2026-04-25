@@ -28,15 +28,15 @@ Browse the official Luanti content repository for VoxeLibre-compatible mods usin
 ### 2. Install using the automation script
 Download the `.zip` file for the mod to your machine. Instead of extracting it manually and editing the world configuration files, you can use the provided `install_mod.sh` script.
 
-Run the script from the project root, providing the path to the downloaded zip file and the exact technical name of the mod:
+Run the script from the project root, simply providing the path to the downloaded zip file:
 
 ```bash
-./install_mod.sh /path/to/mod.zip <mod_name>
+./install_mod.sh /path/to/mod.zip
 ```
 
-*Example for `mcl_furniture`:*
+*Example:*
 ```bash
-./install_mod.sh ~/Downloads/mcl_furniture-1.2.zip mcl_furniture
+./install_mod.sh ~/Downloads/bgstack15_mcl_ruby_stuff_1.0.zip
 ```
 
 The script will automatically unzip the file, place it in the correct directory, rename it, enable it in your `world.mt` file, and fix Docker folder permissions for you.

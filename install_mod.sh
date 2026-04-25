@@ -5,30 +5,20 @@ MODS_DIR="data/.minetest/mods"
 WORLD_MT="data/.minetest/worlds/world/world.mt"
 
 # Check arguments
-if [ "$#" -ne 2 ]; then
+if [ "$#" -lt 1 ]; then
     echo "====================================================="
-    echo "Usage: $0 <path_to_zip_file> <exact_mod_name>"
-    echo "Example: $0 ~/Downloads/mcl_furniture.zip mcl_furniture"
+    echo "Usage: $0 <path_to_zip_file>"
+    echo "Example: $0 ~/Downloads/mcl_furniture-1.2.zip"
     echo "====================================================="
     exit 1
 fi
 
 ZIP_FILE="$1"
-MOD_NAME="$2"
 
 if [ ! -f "$ZIP_FILE" ]; then
     echo "Error: Zip file '$ZIP_FILE' not found!"
     exit 1
 fi
-
-echo "Installing mod: $MOD_NAME"
-
-# Temporarily grant host write access to necessary directories using Docker
-echo "-> Granting write permissions to host..."
-docker run --rm -v $(pwd)/data:/var/lib/minetest alpine sh -c "mkdir -p /var/lib/minetest/.minetest/mods && chmod 777 /var/lib/minetest/.minetest/mods && if [ -d /var/lib/minetest/.minetest/worlds/world ]; then chmod 777 /var/lib/minetest/.minetest/worlds/world; fi && if [ -f /var/lib/minetest/.minetest/worlds/world/world.mt ]; then chmod 666 /var/lib/minetest/.minetest/worlds/world/world.mt; fi"
-
-# Ensure mods directory exists
-mkdir -p "$MODS_DIR"
 
 # Extract to a temporary directory
 TMP_DIR=$(mktemp -d)
@@ -43,6 +33,45 @@ if [ -z "$EXTRACTED_FOLDER" ]; then
     rm -rf "$TMP_DIR"
     exit 1
 fi
+
+# Try to automatically read the mod name from internal files
+MOD_NAME=""
+
+if [ -f "$EXTRACTED_FOLDER/mod.conf" ]; then
+    MOD_NAME=$(awk -F'=' '/^name/ {gsub(/[ \t\r\n]/, "", $2); print $2}' "$EXTRACTED_FOLDER/mod.conf")
+    if [ -n "$MOD_NAME" ]; then
+        echo "-> Found mod.conf: Internal name is '$MOD_NAME'"
+    fi
+elif [ -f "$EXTRACTED_FOLDER/modpack.txt" ]; then
+    MOD_NAME=$(awk -F'=' '/^name/ {gsub(/[ \t\r\n]/, "", $2); print $2}' "$EXTRACTED_FOLDER/modpack.txt")
+    if [ -n "$MOD_NAME" ]; then
+        echo "-> Found modpack.txt: Internal name is '$MOD_NAME'"
+    fi
+elif [ -f "$EXTRACTED_FOLDER/modpack.conf" ]; then
+    MOD_NAME=$(awk -F'=' '/^name/ {gsub(/[ \t\r\n]/, "", $2); print $2}' "$EXTRACTED_FOLDER/modpack.conf")
+    if [ -n "$MOD_NAME" ]; then
+        echo "-> Found modpack.conf: Internal name is '$MOD_NAME'"
+    fi
+fi
+
+# Fallback: Guess from the folder name by removing common suffixes
+if [ -z "$MOD_NAME" ]; then
+    BASENAME=$(basename "$EXTRACTED_FOLDER")
+    MOD_NAME=${BASENAME%-master}
+    MOD_NAME=${MOD_NAME%-main}
+    echo "-> No internal name found in config files. Guessing name from folder: '$MOD_NAME'"
+fi
+
+echo "==================================="
+echo "Installing mod: $MOD_NAME"
+echo "==================================="
+
+# Temporarily grant host write access to necessary directories using Docker
+echo "-> Granting write permissions to host..."
+docker run --rm -v $(pwd)/data:/var/lib/minetest alpine sh -c "mkdir -p /var/lib/minetest/.minetest/mods && chmod 777 /var/lib/minetest/.minetest/mods && if [ -d /var/lib/minetest/.minetest/worlds/world ]; then chmod 777 /var/lib/minetest/.minetest/worlds/world; fi && if [ -f /var/lib/minetest/.minetest/worlds/world/world.mt ]; then chmod 666 /var/lib/minetest/.minetest/worlds/world/world.mt; fi"
+
+# Ensure mods directory exists
+mkdir -p "$MODS_DIR"
 
 # Move and rename the folder to the target mods directory
 TARGET_DIR="$MODS_DIR/$MOD_NAME"
