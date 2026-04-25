@@ -25,11 +25,22 @@ TMP_DIR=$(mktemp -d)
 echo "-> Extracting $ZIP_FILE..."
 unzip -q "$ZIP_FILE" -d "$TMP_DIR"
 
-# Find the extracted folder (assuming zip contains exactly one root folder)
-EXTRACTED_FOLDER=$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type d | head -n 1)
+# Check if zip is packaged with a single root folder, or if files are directly at the root
+NUM_ROOT_ITEMS=$(ls -1A "$TMP_DIR" | wc -l)
+NUM_ROOT_DIRS=$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l)
 
-if [ -z "$EXTRACTED_FOLDER" ]; then
-    echo "Error: No folder found inside the zip file."
+if [ "$NUM_ROOT_ITEMS" -eq 1 ] && [ "$NUM_ROOT_DIRS" -eq 1 ]; then
+    # Standard format: one root folder inside the zip
+    EXTRACTED_FOLDER=$(find "$TMP_DIR" -mindepth 1 -maxdepth 1 -type d | head -n 1)
+    FLAT_ZIP=false
+else
+    # Flat format: files/folders are directly at the root of the zip
+    EXTRACTED_FOLDER="$TMP_DIR"
+    FLAT_ZIP=true
+fi
+
+if [ -z "$EXTRACTED_FOLDER" ] || [ "$NUM_ROOT_ITEMS" -eq 0 ]; then
+    echo "Error: Zip file is empty."
     rm -rf "$TMP_DIR"
     exit 1
 fi
@@ -54,12 +65,17 @@ elif [ -f "$EXTRACTED_FOLDER/modpack.conf" ]; then
     fi
 fi
 
-# Fallback: Guess from the folder name by removing common suffixes
+# Fallback: Guess from the folder name or zip name
 if [ -z "$MOD_NAME" ]; then
-    BASENAME=$(basename "$EXTRACTED_FOLDER")
-    MOD_NAME=${BASENAME%-master}
-    MOD_NAME=${MOD_NAME%-main}
-    echo "-> No internal name found in config files. Guessing name from folder: '$MOD_NAME'"
+    if [ "$FLAT_ZIP" = true ]; then
+        ZIP_BASENAME=$(basename "$ZIP_FILE" .zip)
+        MOD_NAME=$(echo "$ZIP_BASENAME" | sed -E 's/_[0-9]+.*$//' | sed 's/-master//' | sed 's/-main//' | sed -E 's/-[0-9]+.*$//' | sed -E 's/^[0-9]+-//')
+    else
+        BASENAME=$(basename "$EXTRACTED_FOLDER")
+        MOD_NAME=${BASENAME%-master}
+        MOD_NAME=${MOD_NAME%-main}
+    fi
+    echo "-> No internal name found in config files. Guessing name: '$MOD_NAME'"
 fi
 
 echo "==================================="
@@ -80,8 +96,12 @@ if [ -d "$TARGET_DIR" ]; then
     rm -rf "$TARGET_DIR"
 fi
 
-mv "$EXTRACTED_FOLDER" "$TARGET_DIR"
-rm -rf "$TMP_DIR"
+if [ "$FLAT_ZIP" = true ]; then
+    mv "$TMP_DIR" "$TARGET_DIR"
+else
+    mv "$EXTRACTED_FOLDER" "$TARGET_DIR"
+    rm -rf "$TMP_DIR"
+fi
 
 echo "-> Successfully moved mod to $TARGET_DIR"
 
