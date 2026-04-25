@@ -1,74 +1,74 @@
-# Luanti (MineClone2) Server Administration Guide
+# Guía de Administración del Servidor Luanti (MineClone2)
 
-This document covers the most common and useful commands for server administrators running a VoxeLibre/MineClone2 world. 
+Este documento cubre los comandos más comunes y útiles para los administradores que ejecutan un mundo de VoxeLibre/MineClone2.
 
-To use these commands, you must first be designated as the server owner (via `name = YourUsername` in `conf/minetest.conf`) or have the appropriate privileges granted to you (`/grant <playername> all`).
+Para usar estos comandos, primero debes ser designado como el propietario del servidor (a través de `name = TuUsuario` en `conf/minetest.conf`) o tener los privilegios adecuados otorgados (`/grant <jugador> all`).
 
-To type a command, press `T` to open the chat window, type the command starting with a forward slash `/`, and press Enter.
+Para escribir un comando, presiona `T` para abrir la ventana de chat, escribe el comando comenzando con una barra diagonal `/` y presiona Enter.
 
 ---
 
-## 🎮 Game Mode Commands
+## 🎮 Comandos de Modo de Juego (Game Mode)
 
-MineClone2 implements a robust gamemode system similar to Minecraft. You need the appropriate privileges (like `server` or `bring`) to change gamemodes for yourself or others.
+MineClone2 implementa un sistema robusto de modos de juego similar al de Minecraft. Necesitas los privilegios adecuados (como `server` o `bring`) para cambiar los modos de juego para ti o para otros.
 
-*   `/gamemode survival` or `/gamemode s` - Switch to Survival mode (health, hunger, limited resources).
-*   `/gamemode creative` or `/gamemode c` - Switch to Creative mode (invincibility, flying, infinite blocks).
-*   `/gamemode spectator` - Switch to Spectator mode (fly through blocks, invisible to others).
-*   `/gamemode adventure` - Switch to Adventure mode (can interact, but cannot break/place blocks without specific tools).
-*   `/gamemode <mode> <player>` - Change the game mode of a specific player.
+*   `/gamemode survival` o `/gamemode s` - Cambiar al modo Supervivencia (salud, hambre, recursos limitados).
+*   `/gamemode creative` o `/gamemode c` - Cambiar al modo Creativo (invencibilidad, vuelo, bloques infinitos).
+*   `/gamemode spectator` - Cambiar al modo Espectador (atravesar bloques, invisible para otros).
+*   `/gamemode adventure` - Cambiar al modo Aventura (puedes interactuar, pero no romper/colocar bloques sin herramientas específicas).
+*   `/gamemode <modo> <jugador>` - Cambia el modo de juego de un jugador específico.
 
-*(Shortcuts: You can also just type `/survival`, `/creative`, or `/spectator`)*
+*(Atajos: También puedes escribir simplemente `/survival`, `/creative` o `/spectator`)*
 
-### Changing Game Modes Permanently
+### Cómo Cambiar los Modos de Juego Permanentemente
 
-*   **For a Single Player:** Using the command `/gamemode <mode> <player>` is **permanent**. It saves directly to their player profile. They will remain in that mode every time they log in, even after server restarts.
-*   **For All Players (Global Default):** To change the game mode for the *entire server* (so every new player joins in Creative instead of Survival), you must edit your `conf/minetest.conf` file and add this line:
+*   **Para un Solo Jugador:** Usar el comando `/gamemode <modo> <jugador>` es **permanente**. Se guarda directamente en el perfil del jugador. Permanecerán en ese modo cada vez que inicien sesión, incluso después de reiniciar el servidor.
+*   **Para Todos los Jugadores (Predeterminado Global):** Para cambiar el modo de juego para *todo el servidor* (para que cada nuevo jugador entre en modo Creativo en lugar de Supervivencia), debes editar tu archivo `conf/minetest.conf` y agregar esta línea:
     ```ini
     creative_mode = true
     ```
-    *(Set it to `false` to default everyone back to Survival).* You must restart the server (`docker compose restart`) for this global setting to take effect.
+    *(Establécelo en `false` para que todos vuelvan a Supervivencia por defecto).* Debes reiniciar el servidor (`docker compose restart`) para que esta configuración global surta efecto.
 
-## 🌍 World & Environment Commands
+## 🌍 Comandos de Mundo y Entorno
 
-*   `/time <0-24000>` - Set the time of day using raw Minetest ticks (e.g., `/time 6000` for midday, `/time 18000` for midnight).
-*   `/time set <day | night>` - Set the time to day or night using standard keywords.
-*   `/weather <clear | rain | thunder>` - Change the current weather.
-*   `/setspawn` - Sets the default global spawn point for all new players who join the server to your current exact location.
+*   `/time <0-24000>` - Establece la hora del día usando "ticks" de Minetest (ej. `/time 6000` para el mediodía, `/time 18000` para la medianoche).
+*   `/time set <day | night>` - Establece la hora a día o noche usando palabras clave.
+*   `/weather <clear | rain | thunder>` - Cambia el clima actual (despejado | lluvia | tormenta).
+*   `/setspawn` - Establece el punto de aparición (spawn) global predeterminado para todos los nuevos jugadores en tu ubicación exacta actual.
 
-## 🎁 Inventory & Item Commands
+## 🎁 Comandos de Inventario y Objetos
 
-*   `/giveme <item_name> [amount]` - Gives yourself an item. (Example: `/giveme mcl_core:diamond 64` or `/giveme mcl_core:apple 10`).
-*   `/give <player> <item_name> [amount]` - Gives an item to a specific player.
-*   `/clearinv [player]` - Clears your inventory entirely, or the inventory of the specified player.
+*   `/giveme <objeto> [cantidad]` - Te da un objeto a ti mismo. (Ejemplo: `/giveme mcl_core:diamond 64` o `/giveme mcl_core:apple 10`).
+*   `/give <jugador> <objeto> [cantidad]` - Le da un objeto a un jugador específico.
+*   `/clearinv [jugador]` - Limpia tu inventario por completo, o el inventario del jugador especificado.
 
-## 🚀 Movement & Teleportation
+## 🚀 Movimiento y Teletransporte
 
-*   `/tp <x>,<y>,<z>` - Teleport yourself to exact world coordinates. (Example: `/tp 100,20,-300`).
-*   `/tp <player_name>` - Teleport yourself to another player.
-*   `/tp <player_1> <player_2>` - Teleport Player 1 to Player 2.
+*   `/tp <x>,<y>,<z>` - Te teletransporta a unas coordenadas exactas del mundo. (Ejemplo: `/tp 100,20,-300`).
+*   `/tp <jugador>` - Te teletransporta hacia otro jugador.
+*   `/tp <jugador_1> <jugador_2>` - Teletransporta al Jugador 1 hacia el Jugador 2.
 
-## 🛡️ Player Management (Moderation)
+## 🛡️ Gestión de Jugadores (Moderación)
 
-*   `/kick <player_name> [reason]` - Disconnects a player from the server temporarily.
-*   `/ban <player_name>` - Permanently bans a player's IP and Name from joining the server.
-*   `/unban <player_name>` - Removes a ban.
-*   `/kill [player_name]` - Instantly kills yourself (or the specified player).
+*   `/kick <jugador> [razón]` - Desconecta a un jugador del servidor temporalmente (expulsar).
+*   `/ban <jugador>` - Banea (bloquea) permanentemente la IP y el nombre de un jugador para que no pueda unirse al servidor.
+*   `/unban <jugador>` - Elimina un ban.
+*   `/kill [jugador]` - Te mata instantáneamente a ti mismo (o al jugador especificado).
 
-## 🔑 Privilege Management
+## 🔑 Gestión de Privilegios
 
-Luanti relies on a granular "privilege" system rather than standard admin ranks. You can give players specific abilities without making them full admins.
+Luanti se basa en un sistema granular de "privilegios" en lugar de rangos estándar de administrador. Puedes otorgar a los jugadores habilidades específicas sin convertirlos en administradores completos.
 
-*   `/grant <player> <privilege>` - Give a specific privilege.
-*   `/revoke <player> <privilege>` - Remove a specific privilege.
-*   `/grant <player> all` - Give all privileges (Make them an admin).
-*   `/privs [player]` - See what privileges you (or another player) currently have.
+*   `/grant <jugador> <privilegio>` - Otorga un privilegio específico.
+*   `/revoke <jugador> <privilegio>` - Elimina un privilegio específico.
+*   `/grant <jugador> all` - Otorga todos los privilegios (Lo convierte en administrador).
+*   `/privs [jugador]` - Mira qué privilegios tienes tú (o tiene otro jugador) actualmente.
 
-**Common Privileges:**
-*   `interact`: Can dig/place blocks and use items.
-*   `shout`: Can speak in global chat.
-*   `fly`: Can toggle flying mode.
-*   `noclip`: Can toggle flying through solid walls.
-*   `fast`: Can toggle fast-running mode.
-*   `teleport`: Can use `/tp`.
-*   `give`: Can use `/giveme`.
+**Privilegios Comunes:**
+*   `interact`: Puede cavar/colocar bloques y usar objetos.
+*   `shout`: Puede hablar en el chat global.
+*   `fly`: Puede activar el modo de vuelo.
+*   `noclip`: Puede activar el vuelo a través de paredes sólidas.
+*   `fast`: Puede activar el modo de correr rápido.
+*   `teleport`: Puede usar el comando `/tp`.
+*   `give`: Puede usar el comando `/giveme`.
