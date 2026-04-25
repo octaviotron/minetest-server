@@ -110,3 +110,14 @@ Or, if you want to follow the file as it updates:
 ```bash
 tail -f data/.minetest/debug.txt
 ```
+
+## Factory Reset (Clean Install)
+
+If your world becomes hopelessly corrupted or you just want to start completely fresh with a brand new world, you can run the factory reset script.
+
+**⚠️ WARNING:** This will permanently delete your world, all installed mods, and all player inventories.
+
+```bash
+./clean_install.sh
+```
+This script will safely stop the container, delete the `data` folder using Docker (to bypass any permission locks), download a completely fresh copy of VoxeLibre (MineClone2), and automatically restart the server to generate your new world.
