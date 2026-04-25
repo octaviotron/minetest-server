@@ -47,6 +47,14 @@ Apply the changes by restarting your Docker container:
 docker compose restart
 ```
 
+### 4. Disabling a Mod
+If a mod is causing issues or you no longer want it, you can instantly disable it using the `disable_mod.sh` script. Just provide the exact name of the mod:
+
+```bash
+./disable_mod.sh mcl_furniture
+```
+Then restart the server to apply the changes.
+
 ## Server Administration (Permissions & Admins)
 
 By default, players joining the server will only have basic privileges (like `interact` and `shout`). To manage the server, give permissions, or use cheats, you must designate a server owner.
@@ -81,3 +89,24 @@ You can now open the chat (press `T` in-game) and run commands to manage other p
 *   `fast`: Allows the player to move quickly (press `J` to toggle).
 *   `teleport`: Allows the player to teleport to other coordinates.
 *   `give`: Allows using the `/give` and `/giveme` commands to spawn items.
+
+## Troubleshooting & Debugging
+
+If your server fails to start, crashes, or a mod breaks, you have two primary ways to check for errors:
+
+### 1. View Live Server Logs
+To view the live output of your Docker container (which shows errors, crashes, and player connections in real-time), run:
+```bash
+docker compose logs -f
+```
+*(Press `Ctrl+C` to exit the live log view)*
+
+### 2. View the Debug Log File
+Luanti writes a detailed log of everything that happens behind the scenes (including detailed stack traces when a Lua mod crashes). You can view the full log file here:
+```bash
+cat data/.minetest/debug.txt
+```
+Or, if you want to follow the file as it updates:
+```bash
+tail -f data/.minetest/debug.txt
+```
