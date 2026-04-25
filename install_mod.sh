@@ -93,7 +93,7 @@ mkdir -p "$MODS_DIR"
 TARGET_DIR="$MODS_DIR/$MOD_NAME"
 if [ -d "$TARGET_DIR" ]; then
     echo "-> Warning: Mod directory $TARGET_DIR already exists. Overwriting..."
-    rm -rf "$TARGET_DIR"
+    docker run --rm -v $(pwd)/data:/var/lib/minetest alpine rm -rf "/var/lib/minetest/.minetest/mods/$MOD_NAME"
 fi
 
 if [ "$FLAT_ZIP" = true ]; then
