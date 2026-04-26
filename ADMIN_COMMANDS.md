@@ -72,3 +72,53 @@ Luanti se basa en un sistema granular de "privilegios" en lugar de rangos están
 *   `fast`: Puede activar el modo de correr rápido.
 *   `teleport`: Puede usar el comando `/tp`.
 *   `give`: Puede usar el comando `/giveme`.
+
+---
+
+## 🏗️ WorldEdit: Construcción Rápida
+
+WorldEdit es una herramienta extremadamente potente que te permite modificar miles de bloques en segundos mediante comandos. Es esencial para construcciones a gran escala.
+
+### 1. Preparación
+Para usar WorldEdit, asegúrate de tener el privilegio:
+*   `/grant <tu_nombre> worldedit`
+
+### 2. El Concepto de Selección
+Casi todos los comandos de WorldEdit funcionan dentro de una **región rectangular** definida por dos puntos opuestos (Posición 1 y Posición 2).
+
+*   **Método Rápido (Varita):** Escribe `//p set` y luego golpea (clic izquierdo) un bloque para el **Punto 1** y pica (clic derecho o usar herramienta de selección) para el **Punto 2**. Verás unos cubos negros con números flotando.
+*   **Método por Coordenadas:**
+    *   `//pos1` - Establece tu ubicación actual como el punto 1.
+    *   `//pos2` - Establece tu ubicación actual como el punto 2.
+
+### 3. Comandos de Llenado y Reemplazo
+*   `//set <nombre_del_bloque>` - Llena toda la selección con ese bloque.
+    *   *Ejemplo:* `//set mcl_core:stone` (Llena de piedra).
+    *   *Ejemplo:* `//set air` (Borra todo en la selección).
+*   `//replace <bloque_viejo> <bloque_nuevo>` - Cambia solo un tipo de bloque por otro.
+    *   *Ejemplo:* `//replace mcl_core:dirt mcl_core:grass` (Cambia tierra por césped).
+
+### 4. Creación de Formas Geométricas
+Estos comandos crean formas alrededor de tu posición actual o del Punto 1.
+*   `//sphere <radio> <bloque>` - Crea una esfera sólida.
+*   `//hollowsphere <radio> <bloque>` - Crea una esfera hueca (una cáscara).
+*   `//cylinder <eje> <radio> <longitud> <bloque>` - Crea un cilindro (Eje puede ser `x`, `y` o `z`).
+*   `//walls <bloque>` - Crea paredes alrededor del perímetro de tu selección actual.
+
+### 5. Copiar, Pegar y Manipular
+*   `//copy` - Copia la selección actual a tu portapapeles (se basa en tu posición relativa).
+*   `//paste` - Pega lo que copiaste en tu ubicación actual.
+*   `//rotate <eje> <grados>` - Rota lo que tienes en el portapapeles (90, 180, 270).
+*   `//stack <dirección> <cantidad>` - Repite la selección varias veces.
+    *   *Direcciones:* `up`, `down`, `north`, `south`, `east`, `west`.
+
+### 6. Control de Errores (¡Muy Importante!)
+Si cometes un error y borras algo que no debías:
+*   `//undo` - Deshace la última acción de WorldEdit.
+*   `//redo` - Rehace lo que acabas de deshacer.
+
+### 💡 Tips Pro:
+1.  **Nombres de bloques:** Para saber el nombre técnico de un bloque, míralo y presiona `F5` (modo debug). Verás algo como `mcl_core:stone` en la pantalla.
+2.  **Hacia dónde miras:** Muchos comandos (como `stack` o `move`) dependen de la dirección en la que estás mirando si no especificas una.
+3.  **Límite de bloques:** Ten cuidado con selecciones masivas (millones de bloques), ya que pueden congelar el servidor temporalmente.
+
