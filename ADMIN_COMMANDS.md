@@ -98,6 +98,31 @@ Casi todos los comandos de WorldEdit funcionan dentro de una **región rectangul
 *   `//replace <bloque_viejo> <bloque_nuevo>` - Cambia solo un tipo de bloque por otro.
     *   *Ejemplo:* `//replace mcl_core:dirt mcl_core:grass` (Cambia tierra por césped).
 
+#### 📋 Lista de Bloques Comunes (MineClone2)
+Usa estos nombres exactos en tus comandos:
+
+| Bloque | ID Técnico |
+| :--- | :--- |
+| **Aire (Borrar)** | `air` |
+| **Piedra** | `mcl_core:stone` |
+| **Adoquín** | `mcl_core:cobble` |
+| **Tierra** | `mcl_core:dirt` |
+| **Césped** | `mcl_core:grass` |
+| **Arena** | `mcl_core:sand` |
+| **Grava** | `mcl_core:gravel` |
+| **Cristal** | `mcl_core:glass` |
+| **Tablones (Roble)** | `mcl_core:oak_planks` |
+| **Tronco (Roble)** | `mcl_core:oak_log` |
+| **Agua** | `mcl_core:water_source` |
+| **Lava** | `mcl_core:lava_source` |
+| **Ladrillos de piedra** | `mcl_core:stonebrick` |
+| **Obsidiana** | `mcl_core:obsidian` |
+| **Hierro** | `mcl_core:iron_block` |
+| **Oro** | `mcl_core:gold_block` |
+| **Diamante** | `mcl_core:diamond_block` |
+| **Piedra Base** | `mcl_core:bedrock` |
+
+
 ### 4. Creación de Formas Geométricas
 Estos comandos crean formas alrededor de tu posición actual o del Punto 1.
 *   `//sphere <radio> <bloque>` - Crea una esfera sólida.
